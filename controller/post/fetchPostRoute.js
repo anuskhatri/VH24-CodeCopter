@@ -1,4 +1,4 @@
-const fetchAllPost = require('../../actions/post/fectPost')
+const fetchAllPost = require('../../actions/post/fectAllPost')
 const { pool } = require('../../config/dbConfig')
 
 const fetchAllPostRoute = async (req,res) => {
