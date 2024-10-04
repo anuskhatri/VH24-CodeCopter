@@ -24,7 +24,7 @@ const profile_query = `
 `;
 
 
-    const getProfile = async (user_id= 1) =>{
+    const getProfile = async (user_id) =>{
     try{
         const {rows} = await pool.query(profile_query, [user_id])
         return rows

@@ -8,6 +8,7 @@ const fetchAllPost = async () => {
                 requests.title, 
                 requests.description, 
                 requests.current_funded_amount, 
+                requests.requested_amount, 
                 requests.updated_at
             FROM 
                 requests

@@ -1,6 +1,6 @@
 const { pool } = require('../../config/dbConfig');
 
-const fetchAllPost = async () => {
+const fetchPostById = async (postId) => {
     try {
         const { rows } = await pool.query(`
             SELECT 
@@ -17,13 +17,13 @@ const fetchAllPost = async () => {
             JOIN 
                 users ON users.id = requests.ngo_id 
             WHERE 
-                requests.status = $1`, ['Open']);
+                request.id = $1`, [postId]);
         
         return rows;
     } catch (error) {
         console.log(error);
-        throw new Error("ERROR at fetchAllPost: " + error);
+        throw new Error("ERROR at fetchPostById: " + error);
     }
 }
 
-module.exports = fetchAllPost;
+module.exports = fetchPostById;
