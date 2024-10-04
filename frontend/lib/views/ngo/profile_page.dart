@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontend/constants.dart';
 import 'package:frontend/controller/profile_controller.dart';
+import 'package:frontend/model/ngo_profile_model.dart';
+import 'package:frontend/views/ngo/view_transactions.dart';
 import 'package:get/get.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -19,6 +22,14 @@ class ProfilePage extends StatelessWidget {
           style: TextStyle(
               color: Colors.white54, fontSize: 20, fontWeight: FontWeight.w500),
         ),
+        actions: [
+          TextButton(
+              onPressed: () => Get.to(() => RecentTransactions()),
+              child: const Text(
+                "View Transactions",
+                style: TextStyle(color: primaryColor),
+              ))
+        ],
         backgroundColor: bgColor,
         elevation: 0,
       ),
@@ -30,31 +41,109 @@ class ProfilePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Profile Image Section
-              Container(
-                height: 120,
-                width: 120,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade800,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: const Icon(
-                  Icons.person,
-                  size: 80,
-                  color: Colors.white70,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 120,
+                    width: 120,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade800,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: const Icon(
+                      Icons.person,
+                      size: 80,
+                      color: Colors.white70,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                            child: Container(
+                              height: 100,
+                              decoration: BoxDecoration(
+                                color: bgColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Contact Info',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                  SizedBox(height: 10), // Add some spacing
+                                  Text(
+                                    // Replace with your actual contact info from the controller
+                                    profileController.contactInfo.value,
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: const Icon(
+                      FontAwesomeIcons.circleInfo,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
               ),
               const SizedBox(height: 20),
 
               // Organization Name
-              const Text(
-                "Asha Foundation",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              Obx(
+                () => Text(
+                  profileController.ngoName.value,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               const SizedBox(height: 30),
+              Container(
+                decoration: BoxDecoration(
+                  color: primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                width: double.infinity,
+                height: 50,
+                margin: EdgeInsets.symmetric(horizontal: 15),
+                padding: EdgeInsets.all(10),
+
+                // CONDITIONAL
+                child: Row(
+                  children: [
+                    Text("eWallet Balance: ",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600)),
+                    Spacer(),
+                    Text("₹ 10,100",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600)),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
 
               // Stats Section with Card Style
               GridView.count(
@@ -63,32 +152,185 @@ class ProfilePage extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  _buildStatCard("Funds Raised",
-                      profileController.fundsRaised.value.toString()),
-                  _buildStatCard(
-                      "Requests", profileController.requests.value.toString()),
-                  _buildStatCard("Purchased Amount",
-                      profileController.purchasedAmount.value.toString()),
-                  _buildStatCard(
-                      "Review", profileController.review.value.toString()),
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade800,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Obx(
+                          () => Text(
+                            profileController.reviews.length.toString(),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          "Review",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: subTextColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade800,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Obx(() => Text(
+                              profileController.fundsRaised.value.toString(),
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            )),
+                        const SizedBox(height: 5),
+                        Text(
+                          "Funds Raised",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: subTextColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade800,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Obx(() => Text(
+                              profileController.requests.value.toString(),
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            )),
+                        const SizedBox(height: 5),
+                        Text(
+                          "Requests",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: subTextColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade800,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Obx(() => Text(
+                              profileController.purchasedAmount.value
+                                  .toString(),
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            )),
+                        const SizedBox(height: 5),
+                        Text(
+                          "Purchased Amount",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: subTextColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 30),
 
               // Reviews Section Header
-              Container(
+              const SizedBox(
                 width: double.infinity,
                 child: const Text(
                   "Reviews",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: primaryColor,
                   ),
                 ),
               ),
               const SizedBox(height: 10),
 
+              // CONDITIONAL
+
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade800,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
+                      onPressed: () {},
+                      child: const Text("Post",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                    TextField(
+                      maxLines: null,
+                      decoration: const InputDecoration(
+                        hintText: "Write your review here...",
+                        hintStyle: TextStyle(color: subTextColor),
+                        border: InputBorder.none,
+                      ),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
               // Dynamic Review List
               Column(
                 children: profileController.reviews.map((review) {

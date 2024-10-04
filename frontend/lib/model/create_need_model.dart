@@ -2,13 +2,13 @@ class Need {
   String organization;
   String title;
   String desc;
-  String current_funded_amt;
+  String pendingAmt;
 
   Need({
     required this.organization,
     required this.title,
     required this.desc,
-    this.current_funded_amt = '',
+    required this.pendingAmt,
   });
 
   factory Need.fromJson(Map<String, dynamic> json) {
@@ -16,7 +16,7 @@ class Need {
       organization: json['name'],
       title: json['title'],
       desc: json['description'],
-      current_funded_amt: json['current_funded_amount']?.toString() ?? '',
+      pendingAmt: json['pending_amount'],
     );
   }
 
@@ -25,7 +25,7 @@ class Need {
       'organization': organization,
       'title': title,
       'desc': desc,
-      'current_funded_amt': current_funded_amt,
+      'pendingAmt': pendingAmt,
     };
   }
 }

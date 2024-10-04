@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/views/ngo/create_need.dart';
+import 'package:frontend/views/donor/home.dart';
 import 'package:frontend/views/ngo/home.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,14 +12,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: '',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: NGOHome(),
+      home: DonorHome(),
     );
   }
 }
