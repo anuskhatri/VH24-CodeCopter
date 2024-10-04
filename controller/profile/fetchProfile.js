@@ -5,13 +5,13 @@ const fetchProfile = async (req, res) => {
         const { userId } = req.params;
         const data = await getProfile(userId);
         
-        data.forEach((obj) => {
-            obj.total_funded_amount = String(obj.total_funded_amount);
+        // data.forEach((obj) => {
+        //     obj.total_funded_amount = String(obj.total_funded_amount);
             
-            obj.transaction_logs.forEach((log) => {
-                log.amount = String(log.amount);
-            });
-        });
+        //     obj.transaction_logs.forEach((log) => {
+        //         log.amount = String(log.amount);
+        //     });
+        // });
 
         return res.status(200).send(data);
     } catch (error) {

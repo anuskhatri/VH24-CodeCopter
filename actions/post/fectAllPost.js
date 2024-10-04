@@ -5,6 +5,7 @@ const fetchAllPost = async () => {
         const { rows } = await pool.query(`
             SELECT 
                 users.name, 
+                requests.id, 
                 requests.title, 
                 requests.description, 
                 requests.current_funded_amount, 
@@ -15,7 +16,8 @@ const fetchAllPost = async () => {
             JOIN 
                 users ON users.id = requests.ngo_id 
             WHERE 
-                requests.status = $1`, ['Open']);
+                requests.status ILIKE $1
+        `, ['Open']);        
         
         return rows;
     } catch (error) {
