@@ -1,4 +1,5 @@
 const express = require('express')
+const postRoute = require('./post')
 const indexRoute = express.Router()
 
 // Internal Imports
@@ -10,6 +11,6 @@ const indexRoute = express.Router()
 // Mount middleware to apply to routes after authRoute
 // indexRoute.use(validateUserMiddleware)
 
-// Mount routes that require authentication
+indexRoute.use('/post',postRoute)
 
 module.exports = indexRoute
