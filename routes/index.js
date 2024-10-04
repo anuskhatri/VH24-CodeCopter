@@ -1,4 +1,5 @@
 const express = require('express')
+const profileRoute = require('./profile')
 const indexRoute = express.Router()
 
 // Internal Imports
@@ -11,5 +12,5 @@ const indexRoute = express.Router()
 // indexRoute.use(validateUserMiddleware)
 
 // Mount routes that require authentication
-
+indexRoute.use('/profile', profileRoute)
 module.exports = indexRoute

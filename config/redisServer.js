@@ -11,9 +11,9 @@ redis.on('connect', function() {
   console.log('Connected to Redis');
 });
 
-// Handle connection errors
-redis.on('error', function(err) {
-  console.error('Redis error: ' + err);
-});
+// // Handle connection errors
+// redis.on('error', function(err) {
+//   console.error('Redis error: ' + err);
+// });
 
 module.exports = { redis };
