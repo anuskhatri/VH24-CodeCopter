@@ -12,3 +12,4 @@ const getReviews = async (user_id=1 )=>{
     }
     
 module.exports = getReviews
+
