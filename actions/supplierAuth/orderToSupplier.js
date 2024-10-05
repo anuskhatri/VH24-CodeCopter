@@ -20,11 +20,12 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const orderToSupplier = async (product, quantity, supplierName, supplierEmail) => {
+const orderToSupplier = async (req,res) => {
     try {
-        const code = uuidv4();
-        const token = jwt.sign({ code: code }, jwtSecret, { expiresIn: '720h' });
-        const url = `http://localhost:3000/orderToSupplier/${token}`;
+        const {product, quantity, supplierName, supplierEmail}=req.body
+        
+        const token = jwt.sign({ code: 1111 }, jwtSecret, { expiresIn: '720h' });
+        const url = `http://localhost:5173/orderToSupplier/${token}`;
 
         const mailOptions = {
             from: senderEmail,
@@ -41,13 +42,6 @@ const orderToSupplier = async (product, quantity, supplierName, supplierEmail) =
                 console.log('Email sent:', info.response);
             }
         });
-
-        // If you want to store the order details into the database
-        // Example: Insert order into the database (assuming you have a suitable table)
-        const query = 'INSERT INTO orders (product, quantity, code, supplier_email) VALUES ($1, $2, $3, $4)';
-        await pool.query(query, [product, quantity, code, supplierEmail]);
-
-        console.log('Order saved to the database.');
 
     } catch (error) {
         console.error('Error processing order:', error);
@@ -100,7 +94,7 @@ const htmlContent = (product, quantity, url) => {
     <div class="email-container">
         <h1>Order Request: ${product}</h1>
         <p class="content">
-            Dear ${supplierName},
+            Dear Aditya,
         </p>
         <p class="content">
             We would like to place an order for the following product:

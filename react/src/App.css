@@ -1,0 +1,70 @@
+/* Style the body to center everything */
+body {
+  margin: 0;
+  height: 100vh; /* Full viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f4f8;
+}
+
+/* Container for the OTP form */
+.otp-container {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Title styles */
+.otp-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Input field styles */
+.otp-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  transition: border 0.3s;
+}
+
+/* Input focus effect */
+.otp-input:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+/* Button styles */
+.otp-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+/* Button hover effect */
+.otp-button:hover {
+  background-color: #45a049;
+}
+
+/* Error message styles */
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+}
