@@ -3,7 +3,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontend/constants.dart';
 import 'package:frontend/controller/donation_controller.dart';
 import 'package:frontend/controller/profile_controller.dart';
+import 'package:frontend/model/create_need_model.dart';
 import 'package:frontend/model/ngo_profile_model.dart';
+import 'package:frontend/views/ngo/post_details.dart';
 import 'package:frontend/views/ngo/view_transactions.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -153,75 +155,81 @@ class DonorProfile extends StatelessWidget {
                       itemCount: donationController.donations
                           .length, // Replace with the actual number of items
                       itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.all(10),
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade900,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Obx(
-                                    () => Text(
-                                      donationController
-                                          .donations[index].reqTitle,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold,
+                        final need = Need(name: donationController.name.value, title: donationController.name.value, description: donationController.donations[index].reqTitle, currentFundedAmount: donationController.sumOfFunds, requestedAmount: donationController.donations[index].donationAmount);
+                        return GestureDetector(
+                          onTap: (){
+                            Get.to(()=>PostDetails(need: need));
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade900,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Obx(
+                                      () => Text(
+                                        donationController
+                                            .donations[index].reqTitle,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const Spacer(),
-                                ],
-                              ),
-                              Obx(
-                                () => Text(
-                                  DateFormat('yyyy-MM-dd').format(
-                                      DateTime.parse(donationController
-                                          .donations[index].donationDate)),
-                                  style: const TextStyle(color: Colors.white60),
+                                    const Spacer(),
+                                  ],
                                 ),
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Obx(
-                                    () => Text(
-                                      donationController.name.value,
-                                      style: const TextStyle(
-                                          color: Colors.white70, fontSize: 15),
-                                    ),
+                                Obx(
+                                  () => Text(
+                                    DateFormat('yyyy-MM-dd').format(
+                                        DateTime.parse(donationController
+                                            .donations[index].donationDate)),
+                                    style: const TextStyle(color: Colors.white60),
                                   ),
-                                  const Spacer(),
-                                  Row(
-                                    children: [
-                                      const Text(
-                                        "Funds ",
-                                        style: TextStyle(
-                                            color: Colors.white60,
-                                            fontSize: 15),
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Obx(
+                                      () => Text(
+                                        donationController.name.value,
+                                        style: const TextStyle(
+                                            color: Colors.white70, fontSize: 15),
                                       ),
-                                      Obx(
-                                        () => Text(
-                                          donationController
-                                              .donations[index].donationAmount,
-                                          style: const TextStyle(
-                                              color: Colors.white,
+                                    ),
+                                    const Spacer(),
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          "Funds ",
+                                          style: TextStyle(
+                                              color: Colors.white60,
                                               fontSize: 15),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                                        Obx(
+                                          () => Text(
+                                            donationController
+                                                .donations[index].donationAmount,
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },
