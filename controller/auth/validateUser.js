@@ -1,65 +1,45 @@
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { pool } = require('../../config/dbConfig');
-const { comparePassword } = require('../../utils/helper');
-const getUserDetails = require('../../models/user/getUserData');
-const { getUserMutualFunds } = require('../../models/investement/mutualFunds/getUserMutualF');
-const getUserid = require('../../models/user/getUserid');
-const investmentPortfolio = require('../../models/investement/investmentPortfolio');
+const pool = require('../../config/dbConfig'); 
 
-const tokenSecret = process.env.JWTTOKENSECRET;
+// Function to login a user
+async function loginUser(req, res) {
+    const { email, password } = req.body;
 
-const validateCredentials = async (token, pin) => {
     try {
-        const decoded = jwt.verify(token, tokenSecret);
-        const userId = decoded.id;
+        // Check if the user exists
+        const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
-        const findUser = await pool.query("SELECT pin, account_number FROM account WHERE id=$1", [userId]);
-
-        if (findUser.rows.length === 0) {
-            return { valid: false, error: "Invalid credentials" };
+        if (user.rows.length === 0) {
+            return res.status(400).json({ message: 'Invalid email or password' });
         }
 
-        const userPin = findUser.rows[0].pin;
-        const isPasswordValid = comparePassword(`${pin}`, userPin); // pass pin as string
+        const userData = user.rows[0];
 
-        if (!isPasswordValid) {
-            return { valid: false, error: "Invalid credentials" };
+        const isMatch = await bcrypt.compare(password, userData.password);
+
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Invalid email or password' });
         }
 
-        return { valid: true, error: null };
-    } catch (err) {
-        if (err.name === 'TokenExpiredError' || err.name === 'JsonWebTokenError') {
-            return { valid: false, error: "Session expired" };
-        }
-        console.error("Error validating credentials:", err);
-        return { valid: false, error: "An internal error occurred" };
-    }
-}
+        // If password is correct, generate a JWT token
+        const token = jwt.sign({ id: userData.id }, process.env.JWT_SECRET, { expiresIn: '720h' });
 
-const validateUser = async (req, res) => {
-    try {
-        //accountNumber->stores Token
-        const { accountNumber, pin } = req.body;
-        const { valid, error } = await validateCredentials(accountNumber, pin);
-
-        if (!valid) {
-            return res.status(200).send({ valid: false, error: error });
-        }
-
-        const { id } = getUserid(accountNumber);
-        const userDetails = await getUserDetails(id);
-
-        const investmentDetails = await investmentPortfolio(accountNumber, id)
-        return res.status(200).send({ 
-            ...userDetails, 
-            ...investmentDetails,
-            valid: true, 
-            name: `${userDetails.personal_details.first_name} ${userDetails.personal_details.last_name}` 
+        // Send back the token and user info
+        return res.status(200).json({
+            message: 'Login successful',
+            user: {
+                id: userData.id,
+                username: userData.username,
+                email: userData.email,
+                role: userData.role
+            },
+            token: token
         });
     } catch (error) {
-        console.error("Error validating user:", error);
-        return res.status(500).send({ error: "Something went wrong" });
+        console.error(error.message);
+        return res.status(500).json({ message: 'Server error' });
     }
 }
 
-module.exports = validateUser;
+module.exports = loginUser;

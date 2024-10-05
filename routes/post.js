@@ -13,6 +13,7 @@ const postRoute=Router()
 //CRUD
 postRoute.post('/add-post',addPostCon)
 const insertPullReqCon = require('../controller/post/insertPullReqCon')
+const afterPullReq = require('../controller/post/afterPullReq')
 
 //CRUD  
 postRoute.get('/fetch-all-post',fetchAllPostRoute)
@@ -23,6 +24,7 @@ postRoute.post('/donation-payment', payByDonor)
 postRoute.post('/insert-review',insertReviewCon)
 postRoute.post('/insert-contribution',insertContributionCon)
 postRoute.post('/insert-pull-request',insertPullReqCon)
+postRoute.post('/upadte-pull-request',afterPullReq)
 
 
 module.exports=postRoute

@@ -1,6 +1,10 @@
 const { pool } = require("../../config/dbConfig");
+const { redis } = require("../../config/redisServer");
 
 const fetchPostPullReq = async (postId) => {
+  const data = redis.get(`postPullReq:${postId}`)
+  if (data.length > 0) return JSON.parse(data)
+
   const query = `
     SELECT 
       pull_req.funder_id, 
@@ -16,6 +20,8 @@ const fetchPostPullReq = async (postId) => {
 
   try {
     const result = await pool.query(query, [postId]);
+
+    redis.set(`postPullReq:${postId}`, JSON.stringify(result.rows))
     return result.rows; 
   } catch (err) {
     console.error('Error fetching fetchPostPullReq:', err);

@@ -1,59 +1,44 @@
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { pool } = require('../../config/dbConfig');
-const { comparePassword } = require('../../utils/helper');
-const tokenSecret = process.env.JWTTOKENSECRET;
-const tokenOptions = {
-    expiresIn: '720h', // Changed '720hr' to '720h' for standard format
-};
+const { pool } = require('../../config/dbConfig'); // PostgreSQL connection
 
-const validateCredentials = async (accountNumber, pin) => {
+async function registerUser(req, res) {
+    const { username, email, password, contact_info, role } = req.body;
+
     try {
-        const query = `
-            SELECT email 
-            FROM users `;
-        const result = await pool.query(query, [accountNumber]);
+        // Check if the user already exists
+        const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
-        if (result.rows.length === 0) {
-            return { valid: false, error: "Invalid credentials" };
+        if (userExists.rows.length > 0) {
+            return res.status(400).json({ message: 'User with this email already exists' });
         }
 
-        const user = result.rows[0];
-        const userName = `${user.first_name} ${user.last_name}`;
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
-        const isPinValid = comparePassword(`${pin}`, user.pin);
-        if (!isPinValid) {
-            return { valid: false, error: "Invalid credentials" };
-        }
+        const newUser = await pool.query(
+            'INSERT INTO users (name, email, password, role, contact_info) VALUES ($1, $2, $3, $4, $5) RETURNING id, name, email, role',
+            [username, email, hashedPassword, role, contact_info]
+        );
 
-        return { valid: true, userId: user.id, userName: userName, error: null };
+        const user = newUser.rows[0];
+
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '720h' });
+
+        return res.status(201).json({
+            message: 'User registered successfully',
+            user: {
+                id: user.id,
+                username: user.name, // Consistent with `name` in the DB
+                email: user.email,
+                role: user.role,
+            },
+            token: token,
+        });
     } catch (error) {
-        console.error("Error validating credentials:", error);
-        return { valid: false, error: "An internal error occurred" };
+        console.error(error.message);
+        return res.status(500).json({ message: 'Server error' });
     }
 }
 
-const generateToken = (userId) => {
-    const tokenPayload = { id: userId };
-    return jwt.sign(tokenPayload, tokenSecret, tokenOptions);
-}
-
-const createUser = async (req, res) => {
-    try {
-        const { accountNumber, pin } = req.body;
-        const { valid, userId, userName, error } = await validateCredentials(Number(accountNumber), pin);
-
-        if (!valid) {
-            return res.status(200).send({ valid: false, error: error });
-        }
-
-        const token = generateToken(userId);
-        const userDetails = await getUserDetails(userId);
-        const investmentDetails = await investmentPortfolio(token, userId)
-        return res.status(200).json({ ...userDetails, ...investmentDetails, valid: true, token: token, name: userName });
-    } catch (error) {
-        console.error("Error creating user:", error);
-        return res.status(500).json({ error: "Something went wrong" });
-    }
-}
-
-module.exports = createUser;
+module.exports = registerUser;

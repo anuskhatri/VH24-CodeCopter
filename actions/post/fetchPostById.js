@@ -1,7 +1,11 @@
 const { pool } = require('../../config/dbConfig');
+const { redis } = require('../../config/redisServer');
 
 const fetchPostById = async (postId) => {
     try {
+        const data = redis.get(`post:${postId}`)
+        if (data.length > 0) return JSON.parse(data)
+
         const { rows } = await pool.query(`
             SELECT 
                 users.name, 
@@ -19,7 +23,8 @@ const fetchPostById = async (postId) => {
                 users ON users.id = requests.ngo_id 
             WHERE 
                 requests.id = $1`, [postId]);
-        
+
+        redis.set(`post:${postId}`, JSON.stringify(rows))
         return rows;
     } catch (error) {
         console.error("ERROR at fetchPostById:", error);

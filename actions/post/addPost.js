@@ -1,4 +1,6 @@
 const { pool } = require("../../config/dbConfig");
+const { redis } = require("../../config/redisServer");
+const updateAllPost = require("../redis/updatePostCache");
 
 const addPost = async (ngoId, requestedAmount, postDescription, postTitle, categories) => {
   const query = `
@@ -10,6 +12,7 @@ const addPost = async (ngoId, requestedAmount, postDescription, postTitle, categ
 
   try {
     const data = await pool.query(query, values);
+    updateAllPost()    
     return data.rows;
   } catch (err) {
     console.error('Error inserting request:', err);

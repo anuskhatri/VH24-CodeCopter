@@ -1,13 +1,8 @@
-const { pool } = require('../../config/dbConfig');
-const { redis } = require('../../config/redisServer');
-const updateAllPost = require('../redis/updatePostCache');
+const { pool } = require("../../config/dbConfig");
+const { redis } = require("../../config/redisServer")
 
-const fetchAllPost = async () => {
+const updateAllPost=async()=>{
     try {
-        const data=redis.get('allPost')
-        if (data.length>0) return JSON.parse(data)
-        updateAllPost()
-
         const { rows } = await pool.query(`
             SELECT 
                 users.name, 
@@ -24,12 +19,11 @@ const fetchAllPost = async () => {
             WHERE 
                 requests.status ILIKE $1
         `, ['Open']);        
-        
-        return rows;
+        redis.set('allPost',JSON.stringify(rows))
     } catch (error) {
         console.log(error);
-        throw new Error("ERROR at fetchAllPost: " + error);
+        throw new Error("ERROR at updateAllPost: " + error);
     }
 }
 
-module.exports = fetchAllPost;
+module.exports=updateAllPost

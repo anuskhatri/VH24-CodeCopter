@@ -3,13 +3,10 @@ const { redis } = require('../../config/redisServer');
 
 const fetchUserProfile = async (userId) => {
   try {
-  const data = redis.get(`userProfile:${userId}`)
-  if (data.length > 0) return JSON.parse(data)
     // Fetch user details first
     const userQuery = `
       SELECT 
         users.name, 
-        users.id, 
         users.role, 
         users.contact_info
       FROM users
@@ -68,7 +65,6 @@ const fetchUserProfile = async (userId) => {
 
     // Return user profile and donation rows
     const dataToSend= {
-      userProfileId:user.id,
       name: user.name,
       role: user.role,
       contact_info: user.contact_info,
