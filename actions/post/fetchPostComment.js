@@ -3,13 +3,13 @@ const { pool } = require("../../config/dbConfig");
 const fetchPostComments = async (postId) => {
   const query = `
     SELECT 
-      donation.funder_id, 
-      donation.donation_amount, 
-      donation.donation_date, 
+      donations.funder_id, 
+      donations.donation_amount, 
+      donations.donation_date, 
       users.name 
-    FROM donation
-    JOIN users ON donation.funder_id = users.id
-    WHERE donation.request_id = $1;
+    FROM donations
+    JOIN users ON donations.funder_id = users.id
+    WHERE donations.request_id = $1;
   `;
 
   try {
@@ -17,7 +17,8 @@ const fetchPostComments = async (postId) => {
     return result.rows; 
   } catch (err) {
     console.error('Error fetching fetchPostComment:', err);
-    res.status(500)
+    throw new Error("Error fetching fetchPostComment");
+    
 }
 };
 

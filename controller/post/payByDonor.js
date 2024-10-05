@@ -2,9 +2,9 @@ const payByDonor = require("../../actions/post/payByDonor")
 
 const donationPay = async (req, res)=>{ // donationPay for accessig the insert function of payByDonor.js
     try{
-        const {user_id, doner_id, post_id, amount}=req.body
+        const {doner_id, post_id, amount}=req.body
         
-        await payByDonor(user_id, doner_id, post_id, amount);
+        await payByDonor(doner_id, post_id, amount);
         return res.send('OK').status(200)
     }
     catch(error){

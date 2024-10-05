@@ -7,7 +7,7 @@ const getPostComment = async (req, res) => {
         res.send(data)
     } catch (error) {
         console.error('Error fetching fetchPostComment:', err);
-        throw new Error(`Failed to fetch fetchPostComment: ${err.message}`);
+        res.status(500)
     }
 }
 module.exports=getPostComment

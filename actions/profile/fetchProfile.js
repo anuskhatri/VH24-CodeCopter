@@ -27,12 +27,14 @@ const fetchUserProfile = async (userId) => {
       donationQuery = `
         SELECT 
           donations.id,
-          donations.request_id,  -- Added request_id here
+          donations.request_id,  
           donations.donation_amount, 
           donations.donation_date, 
           donations.funder_id,
+          requests.title AS request_title,  -- Select request title
           SUM(donations.donation_amount) OVER () AS sum_of_fund
         FROM donations
+        JOIN requests ON donations.request_id = requests.id  -- Join with requests table
         WHERE donations.receiver_id = $1;
       `;
       donationValues = [userId];
@@ -40,12 +42,14 @@ const fetchUserProfile = async (userId) => {
       donationQuery = `
         SELECT 
           donations.id,
-          donations.request_id,  -- Added request_id here
+          donations.request_id,  
           donations.donation_amount, 
           donations.donation_date, 
           donations.receiver_id,
+          requests.title AS request_title,  -- Select request title
           SUM(donations.donation_amount) OVER () AS sum_of_fund
         FROM donations
+        JOIN requests ON donations.request_id = requests.id  -- Join with requests table
         WHERE donations.funder_id = $1;
       `;
       donationValues = [userId];
@@ -64,13 +68,14 @@ const fetchUserProfile = async (userId) => {
       role: user.role,
       contact_info: user.contact_info,
       sum_of_fund: sumOfFund,
-      donations: donationRows.map(({ id, request_id, donation_amount, donation_date, funder_id, receiver_id }) => ({
+      donations: donationRows.map(({ id, request_id, donation_amount, donation_date, funder_id, receiver_id, request_title }) => ({
         id,
-        request_id,  // Added request_id in the returned object
+        request_id,
         donation_amount,
         donation_date,
         funder_id,
-        receiver_id
+        receiver_id,
+        request_title  // Correctly include request title in the returned object
       }))
     };
   } catch (error) {
