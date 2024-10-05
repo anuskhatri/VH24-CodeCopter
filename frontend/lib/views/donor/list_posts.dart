@@ -35,8 +35,8 @@ class ListPosts extends StatelessWidget {
               itemBuilder: (context, index) {
                 final need = controller.needs[index];
                 return GestureDetector(
-                    onTap: () {
-                      controller.fetchPostByid(need.id);
+                    onTap: () async {
+                      await controller.fetchPostByid(need.id);
                       commentsController.fetchPr(need.id);
                       commentsController.fetchComments(need.id);
                     },

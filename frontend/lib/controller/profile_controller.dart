@@ -49,21 +49,18 @@ class ProfileController extends GetxController {
     try {
       final response = await _dio.get('$baseUrl/profile/fetch-profile/1');
       if (response.data.isNotEmpty) {
-        final data = response.data[0];
-
-        // Parsing NGO details
-        ngoName.value = data['name'] ?? 'Unknown NGO';
-        contactInfo.value = data['contact_info'] ?? 'No contact info';
-        fundsRaised.value = data['total_funded_amount']?.toString() ?? "";
-        requests.value = data['total_requests']?.toString() ?? "";
-        purchasedAmount.value = data['total_purchase_amount']?.toString() ?? "";
-
-        print(data["transaction_logs"]);
+        print(response);
+        ngoName.value = response.data['name'] ?? 'Unknown NGO';
+        contactInfo.value = response.data['contact_info'] ?? 'No contact info';
+        fundsRaised.value = response.data['sum_of_fund']?.toString() ?? "";
+  
+        // requests.value = data['total_requests']?.toString() ?? "";
+        // purchasedAmount.value = data['total_purchase_amount']?.toString() ?? "";
 
         // Parsing transaction logs
-        if (data['transaction_logs'] != null) {
+        if (response.data['donations'] != null) {
           transactionLogs.clear(); // Clear previous logs
-          for (var log in data['transaction_logs']) {
+          for (var log in response.data['donations']) {
             transactionLogs.add(
               Transactions.fromJson(log), // Use the factory method to create instances
             );

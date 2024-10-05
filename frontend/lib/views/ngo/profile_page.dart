@@ -38,87 +38,40 @@ class ProfilePage extends StatelessWidget {
           width: double.infinity,
           margin: const EdgeInsets.all(20),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               // Profile Image Section
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    height: 120,
-                    width: 120,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade800,
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: const Icon(
-                      Icons.person,
-                      size: 80,
-                      color: Colors.white70,
+                  Obx(
+                    () => Text(
+                      profileController.ngoName.value,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Dialog(
-                            child: Container(
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: bgColor,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: const EdgeInsets.all(20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Contact Info',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  ),
-                                  SizedBox(height: 10), // Add some spacing
-                                  Text(
-                                    // Replace with your actual contact info from the controller
-                                    profileController.contactInfo.value,
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: const Icon(
-                      FontAwesomeIcons.circleInfo,
-                      color: Colors.white,
-                    ),
-                  )
+                  Spacer(),
+                  Container(
+                    height: 70,
+                    width: 70,
+                    decoration: BoxDecoration(
+                        color: Colors.grey.shade800,
+                        borderRadius: BorderRadius.circular(100),
+                        image: DecorationImage(
+                            image: AssetImage("assets/profile.jpg"))),
+                  ),
                 ],
               ),
-              const SizedBox(height: 20),
 
-              // Organization Name
-              Obx(
-                () => Text(
-                  profileController.ngoName.value,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
               const SizedBox(height: 30),
               Container(
                 decoration: BoxDecoration(
-                  color: primaryColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 width: double.infinity,
@@ -129,7 +82,7 @@ class ProfilePage extends StatelessWidget {
                 // CONDITIONAL
                 child: Row(
                   children: [
-                    Text("eWallet Balance: ",
+                    Text("Wallet Balance: ",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -144,6 +97,8 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
+
+              Divider(),
 
               // Stats Section with Card Style
               GridView.count(
@@ -214,67 +169,67 @@ class ProfilePage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.all(10),
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade800,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Obx(() => Text(
-                              profileController.requests.value.toString(),
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),
-                            )),
-                        const SizedBox(height: 5),
-                        Text(
-                          "Requests",
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: subTextColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(10),
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade800,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Obx(() => Text(
-                              profileController.purchasedAmount.value
-                                  .toString(),
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),
-                            )),
-                        const SizedBox(height: 5),
-                        Text(
-                          "Purchased Amount",
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: subTextColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   margin: const EdgeInsets.all(10),
+                  //   padding: const EdgeInsets.all(10),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.grey.shade800,
+                  //     borderRadius: BorderRadius.circular(10),
+                  //   ),
+                  //   child: Column(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       Obx(() => Text(
+                  //             profileController.requests.value.toString(),
+                  //             style: const TextStyle(
+                  //               fontSize: 15,
+                  //               fontWeight: FontWeight.w600,
+                  //               color: Colors.white,
+                  //             ),
+                  //           )),
+                  //       const SizedBox(height: 5),
+                  //       Text(
+                  //         "Requests",
+                  //         style: const TextStyle(
+                  //           fontSize: 14,
+                  //           fontWeight: FontWeight.w400,
+                  //           color: subTextColor,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Container(
+                  //   margin: const EdgeInsets.all(10),
+                  //   padding: const EdgeInsets.all(10),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.grey.shade800,
+                  //     borderRadius: BorderRadius.circular(10),
+                  //   ),
+                  //   child: Column(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       Obx(() => Text(
+                  //             profileController.purchasedAmount.value
+                  //                 .toString(),
+                  //             style: const TextStyle(
+                  //               fontSize: 15,
+                  //               fontWeight: FontWeight.w600,
+                  //               color: Colors.white,
+                  //             ),
+                  //           )),
+                  //       const SizedBox(height: 5),
+                  //       Text(
+                  //         "Purchased Amount",
+                  //         style: const TextStyle(
+                  //           fontSize: 14,
+                  //           fontWeight: FontWeight.w400,
+                  //           color: subTextColor,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
               const SizedBox(height: 30),
@@ -332,11 +287,11 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               // Dynamic Review List
-              Column(
-                children: profileController.reviews.map((review) {
-                  return ReviewCard(review: review);
-                }).toList(),
-              ),
+              // Column(
+              //   children: profileController.reviews.map((review) {
+              //     return ReviewCard(review: review);
+              //   }).toList(),
+              // ),
             ],
           ),
         ),

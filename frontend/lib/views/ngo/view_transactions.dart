@@ -62,10 +62,10 @@ class TransactionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: bgColor,
+        color: const Color.fromARGB(255, 45, 45, 45),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -76,24 +76,13 @@ class TransactionTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Row(
-                children: [
-                  Text(
-                    "By: ${transaction.type}",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
+             
               const SizedBox(height: 5),
               Text(
                 transaction.description,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 13,
+                  fontSize: 15,
                 ),
               ),
             ],
@@ -111,9 +100,9 @@ class TransactionTile extends StatelessWidget {
                 ),
               ),
               Text(
-                transaction.amount,
+                transaction.amount.toString(),
                 style: const TextStyle(
-                  color: Colors.greenAccent,
+                  color: Colors.green,
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
                 ),

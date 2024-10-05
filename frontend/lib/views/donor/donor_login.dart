@@ -67,20 +67,17 @@ class DonorLogin extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        if (!loginController.sessionExists.value)
-                          TextFormField(
-                            controller: loginController.donorIdController,
-                            style: const TextStyle(color: Colors.white),
-                            decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              labelStyle: TextStyle(color: Colors.white),
-                              labelText: 'Donor ID',
+                        TextFormField(
+                          controller: null,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: const InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
                             ),
-                            validator: (value) =>
-                                loginController.validateDonorId(value),
+                            labelStyle: TextStyle(color: Colors.white),
+                            labelText: 'Donor ID',
                           ),
+                        ),
                         const SizedBox(height: 20),
                         TextFormField(
                           controller: loginController.passwordController,
@@ -93,8 +90,6 @@ class DonorLogin extends StatelessWidget {
                             labelStyle: TextStyle(color: Colors.white),
                             labelText: 'Password',
                           ),
-                          validator: (value) =>
-                              loginController.validatePassword(value),
                         ),
                         const SizedBox(height: 20),
                         Container(
@@ -107,12 +102,7 @@ class DonorLogin extends StatelessWidget {
                                   const Color(0xff2B2B2B)),
                               splashFactory: NoSplash.splashFactory,
                             ),
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                loginController
-                                    .login(); // Use the same login method for all cases
-                              }
-                            },
+                            onPressed: () {},
                             child: const Text(
                               "Login",
                               style: TextStyle(fontSize: 17),

@@ -110,6 +110,21 @@ class PostDetails extends StatelessWidget {
                                         donationController
                                             .donationPayments(need.id);
                                         Navigator.pop(context);
+                                        showDialog(context: context, builder: (builder){
+                                          return AlertDialog(
+                                            backgroundColor: bgColor,
+                                            title: const Text("Payment Successful", style: TextStyle(color: Colors.white),),
+                                            content: const Text("Thank you for your contribution", style: TextStyle(color: Colors.white),),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text("Close", style: TextStyle(color: primaryColor),),
+                                              )
+                                            ],
+                                          );
+                                        });
                                       },
                                       icon: const FaIcon(
                                         FontAwesomeIcons.plus,
@@ -260,7 +275,7 @@ class PostDetails extends StatelessWidget {
                                                     style: const TextStyle(
                                                         color: Colors.white),
                                                   ),
-                                                  const SizedBox(height: 10),
+                                                  Spacer(),
                                                   Text(
                                                     pr['offer'],
                                                     style: const TextStyle(

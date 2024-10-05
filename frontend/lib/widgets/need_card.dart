@@ -32,6 +32,18 @@ class NeedCard extends StatelessWidget {
                 ),
               ),
               const Spacer(),
+              Row(
+                children: [
+                  const Text(
+                    "Funds ",
+                    style: TextStyle(color: Colors.white60, fontSize: 15),
+                  ),
+                  Text(
+                    need.currentFundedAmount.toString(),
+                    style: const TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                ],
+              ),
             ],
           ),
           Text(
@@ -48,18 +60,7 @@ class NeedCard extends StatelessWidget {
                 style: const TextStyle(color: Colors.white70, fontSize: 15),
               ),
               const Spacer(),
-              Row(
-                children: [
-                  const Text(
-                    "Funds ",
-                    style: TextStyle(color: Colors.white60, fontSize: 15),
-                  ),
-                  Text(
-                    need.currentFundedAmount.toString(),
-                    style: const TextStyle(color: Colors.white, fontSize: 15),
-                  ),
-                ],
-              ),
+              
             ],
           ),
         ],
