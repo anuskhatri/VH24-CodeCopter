@@ -1,34 +1,265 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontend/constants.dart';
-import 'package:frontend/controller/create_need_controller.dart';
+import 'package:frontend/controller/comments_controller.dart';
+import 'package:frontend/controller/donation_controller.dart';
+import 'package:frontend/controller/profile_controller.dart';
+import 'package:frontend/model/create_need_model.dart';
+import 'package:frontend/model/donation_model.dart';
+import 'package:frontend/views/ngo/profile_page.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class PostDetails extends StatelessWidget {
-  final int postId;
-  const PostDetails({super.key, required this.postId});
+  final Need need;
+
+  PostDetails({Key? key, required this.need}) : super(key: key);
+
+  final ProfileController profileController = Get.put(ProfileController());
+  final PaymentController payController = Get.put(PaymentController());
+  final DonationController donationController = Get.put(DonationController());
 
   @override
   Widget build(BuildContext context) {
-    final NeedController controller = Get.put(NeedController());
-
     return Scaffold(
       backgroundColor: bgColor,
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Obx(() => Text(controller.needs[postId].title,
-                style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white))),
+            Text(
+              need.title,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
             const SizedBox(height: 10),
-            Obx(() => Text(controller.needs[postId].desc,
-                style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.white))),
+            Text(
+              need.description, // Use need.description instead of need.desc
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+                color: Colors.white,
+              ),
+            ),
+            const Spacer(),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                height:
+                                    MediaQuery.of(context).size.height * 0.3,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: bgColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Payment Gateway",
+                                      style: TextStyle(
+                                          color: subTextColor,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 1),
+                                      width: double.infinity,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: overlayColor,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: TextFormField(
+                                        controller:
+                                            donationController.donationTextController,
+                                        
+                                       
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 5),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Container(
+                                      alignment: Alignment.centerRight,
+                                      child: TextButton.icon(
+                                        onPressed: () {
+                                          donationController.donationPayments(
+                                              need.id);
+                                          Navigator.pop(context);
+                                        },
+                                        icon: const FaIcon(
+                                            FontAwesomeIcons.plus,
+                                            size: 17,
+                                            color: primaryColor),
+                                        label: const Text(
+                                          "Proceed",
+                                          style: TextStyle(
+                                              color: primaryColor,
+                                              fontSize: 15),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    },
+                    child: const Text(
+                      "Contributor",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange),
+                    onPressed: () {
+                      final CommentsController commentsController =
+                          Get.put(CommentsController());
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (builder) {
+                          return SingleChildScrollView(
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(color: bgColor),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      const Text(
+                                        "Code",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      const Text(
+                                        "Blane",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  Obx(
+                                    () => Column(
+                                      children: commentsController.comments
+                                          .map((review) {
+                                        return Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          padding: const EdgeInsets.all(10),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                review['name'],
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 10),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    DateFormat('yyyy-MM-dd')
+                                                        .format(DateTime.parse(
+                                                            review[
+                                                                "donation_date"])),
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    review['donation_amount'],
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                  TextField(
+                                    maxLines: null,
+                                    decoration: const InputDecoration(
+                                      hintText: "Write your review here...",
+                                      hintStyle: TextStyle(color: subTextColor),
+                                      border: InputBorder.none,
+                                    ),
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: primaryColor,
+                                      ),
+                                      onPressed: () {
+                                        // Handle review posting
+                                      },
+                                      child: const Text("Post", style: TextStyle(color: Colors.white)),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: const Text(
+                      "Threads",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

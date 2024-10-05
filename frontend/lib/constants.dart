@@ -6,4 +6,6 @@ const subTextColor = Color(0xFF989898);
 const primaryColor = Color(0xFFF26624);
 
 
-const baseUrl = "https://rapid-raptor-slightly.ngrok-free.app/api/";
+const baseUrl = "https://rapid-raptor-slightly.ngrok-free.app/api";
+
+const userId = 1;

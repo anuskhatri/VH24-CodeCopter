@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
 import 'package:frontend/controller/home_controller.dart';
 import 'package:frontend/views/donor/donor_profile.dart';
-import 'package:frontend/views/donor/list_ngos.dart';
 import 'package:frontend/views/donor/list_posts.dart';
-import 'package:frontend/views/ngo/create_need.dart';
 import 'package:frontend/views/ngo/profile_page.dart';
 import 'package:get/get.dart';
 
@@ -22,8 +20,6 @@ class DonorHome extends StatelessWidget {
           case 0:
             return DonorProfile();
           case 1:
-            return ListNGOs();
-          case 2:
             return ListPosts();
           default:
             return ProfilePage();
@@ -44,10 +40,6 @@ class DonorHome extends StatelessWidget {
             BottomNavigationBarItem(
               icon: Icon(Icons.handshake_rounded, color: Colors.white),
               label: "Donate",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list, color: Colors.white),
-              label: "Posts",
             ),
           ],
           selectedItemColor: primaryColor,

@@ -1,31 +1,31 @@
 class Need {
-  String organization;
-  String title;
-  String desc;
-  String pendingAmt;
+  final String name;
+  final int id;
+  final String title;
+  final String description;
+  final dynamic currentFundedAmount;
+  final dynamic requestedAmount;
+  final String? status; // Allow status to be null
 
   Need({
-    required this.organization,
+    required this.name,
+    this.id = 0,
     required this.title,
-    required this.desc,
-    required this.pendingAmt,
+    required this.description,
+    required this.currentFundedAmount,
+    required this.requestedAmount,
+    this.status, // Make status optional
   });
 
   factory Need.fromJson(Map<String, dynamic> json) {
     return Need(
-      organization: json['name'],
+      name: json['name'] ?? 'Unknown',
+      id: json['id'],
       title: json['title'],
-      desc: json['description'],
-      pendingAmt: json['pending_amount'],
+      description: json['description'],
+      currentFundedAmount: json['current_funded_amount'],
+      requestedAmount: json['requested_amount'],
+      status: json['status'] ?? 'Unknown', // Provide a default value
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'organization': organization,
-      'title': title,
-      'desc': desc,
-      'pendingAmt': pendingAmt,
-    };
   }
 }

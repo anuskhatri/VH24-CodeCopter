@@ -18,6 +18,12 @@ class ProfileController extends GetxController {
   var contactInfo = ''.obs;
   var transactionLogs = <Transactions>[].obs;
 
+
+
+  void addReview(Review review) {
+    reviews.add(review);
+  }
+
   var reviews = <Review>[
     Review(
         userName: "Alice",

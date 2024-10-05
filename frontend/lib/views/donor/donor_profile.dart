@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontend/constants.dart';
+import 'package:frontend/controller/donation_controller.dart';
 import 'package:frontend/controller/profile_controller.dart';
 import 'package:frontend/model/ngo_profile_model.dart';
 import 'package:frontend/views/ngo/view_transactions.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class DonorProfile extends StatelessWidget {
-  final ProfileController profileController = Get.put(ProfileController());
+  final DonationController donationController = Get.put(DonationController());
 
   DonorProfile({super.key});
 
@@ -74,13 +76,13 @@ class DonorProfile extends StatelessWidget {
                                         color: Colors.white),
                                   ),
                                   SizedBox(height: 10), // Add some spacing
-                                  Text(
-                                    // Replace with your actual contact info from the controller
-                                    // profileController.contactInfo.value,
-                                    "1234567890",
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.white),
-                                  ),
+                                  Obx(
+                                    () => Text(
+                                      donationController.contactInfo.value,
+                                      style: const TextStyle(
+                                          fontSize: 16, color: Colors.white),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
@@ -97,12 +99,14 @@ class DonorProfile extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              Text(
-                "Aditya Hakani",
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              Obx(
+                () => Text(
+                  donationController.name.value,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               const SizedBox(height: 30),
@@ -123,7 +127,7 @@ class DonorProfile extends StatelessWidget {
                             fontSize: 16,
                             fontWeight: FontWeight.w600)),
                     Spacer(),
-                    Text("₹ 10,100",
+                    Text(donationController.sumOfFunds.value,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -146,65 +150,80 @@ class DonorProfile extends StatelessWidget {
                     ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: 1, // Replace with the actual number of items
+                      itemCount: donationController.donations
+                          .length, // Replace with the actual number of items
                       itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.all(10),
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                        color: Colors.grey.shade900,
-                        borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                          children: [
-                            Text(
-                            "Donate Clothes",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            ),
-                            const Spacer(),
-                          ],
+                        return Container(
+                          margin: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade900,
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          Text(
-                          "Donated 5 clothes to the needy",
-                          style: const TextStyle(color: Colors.white60),
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                            "NGO 11",
-                            style: const TextStyle(
-                              color: Colors.white70, fontSize: 15),
-                            ),
-                            const Spacer(),
-                            Row(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                              "Funds ",
-                              style: TextStyle(
-                                color: Colors.white60, fontSize: 15),
+                              Row(
+                                children: [
+                                  Obx(
+                                    () => Text(
+                                      donationController
+                                          .donations[index].reqTitle,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                ],
                               ),
-                              Text(
-                              "10,100",
-                              style: const TextStyle(
-                                color: Colors.white, fontSize: 15),
+                              Obx(
+                                () => Text(
+                                  DateFormat('yyyy-MM-dd').format(
+                                      DateTime.parse(donationController
+                                          .donations[index].donationDate)),
+                                  style: const TextStyle(color: Colors.white60),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Obx(
+                                    () => Text(
+                                      donationController.name.value,
+                                      style: const TextStyle(
+                                          color: Colors.white70, fontSize: 15),
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        "Funds ",
+                                        style: TextStyle(
+                                            color: Colors.white60,
+                                            fontSize: 15),
+                                      ),
+                                      Obx(
+                                        () => Text(
+                                          donationController
+                                              .donations[index].donationAmount,
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
                               ),
                             ],
-                            ),
-                          ],
                           ),
-                        ],
-                        ),
-                      );
+                        );
                       },
                     )
                   ],
